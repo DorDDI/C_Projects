@@ -195,3 +195,78 @@ void printSeriesList(serie** watch_series, int index)
 	}
 }
 
+void getWatchingDetails(serie** watch_series, int len)
+//input a new view and update the details 
+{
+	int i;
+	int res;
+	FILE* watching_create;								//create the watch list file
+	watching_create = fopen("watching.txt", "a");		
+	printf("Insert Serie Code:");
+	int code;
+	res = scanf("%d", &code);
+	int flag_correct = 0;								//flag of the correct insert code
+	while (!(flag_correct))
+	{
+		for (i = 0; i < len; i++)
+		{
+			if (watch_series[i]->serieCode == code)		//check if the insert code is in the file 
+			{
+				flag_correct = 1;						//if we got a correct code
+				break;
+			}
+
+		}
+		if (!(flag_correct))							//if we still didnt find a correct code
+		{
+			printf("wrong serie code, try again!!!\n");
+			res = scanf("%d", &code);
+		}
+	}
+
+	printf("Insert Season Number (1 - %d):", watch_series[i]->numSeasons);	
+	int season;
+	res = scanf("%d", &season);							//insert the season viewed
+	flag_correct = 0;									//flag of the correct insert season number
+	while (!(flag_correct))	
+	{
+		if (watch_series[i]->numSeasons >= season && season >= 1)
+		{
+			flag_correct = 1;							//if we got a correct season number
+			break;
+		}
+
+		if (!(flag_correct))							//if we still didnt find a correct season
+		{
+			printf("wrong season number, try again!!!\n");
+			res = scanf("%d", &season);
+		}
+	}
+
+	watch_series[i]->rank++;							//increase the number of the rank of the serie
+	(watch_series[i]->watchingDetails)[season - 1]++;	//increase the number of the view counter of the season in the watching list
+
+	printf("series: %d, season: %d accepted!!!\n", code, season);
+	fprintf(watching_create, "%03d,%d\n", code, season);
+	fclose(watching_create);
+}
+
+void printWatchingDetails(serie** watch_series)
+//print the details of a single serie
+{
+	FILE* watching_print;									//pointer for the whatching list
+	watching_print = fopen("watching.txt", "r");
+	int seri_code;									
+	int seri_sesn;
+	int res = fscanf(watching_print, "%d%*c", &seri_code);	//input from the file
+	res = fscanf(watching_print, "%d%*c", &seri_sesn);
+	printf("Watching Details\n");
+	while (res != EOF)
+	{
+		printf("Series Code:%03d, Season Number:%d\n", seri_code, seri_sesn);		//print the results
+		res = fscanf(watching_print, "%d%*c", &seri_code);	//input from the file
+		res = fscanf(watching_print, "%d%*c", &seri_sesn);
+	}
+	fclose(watching_print);
+}
+
