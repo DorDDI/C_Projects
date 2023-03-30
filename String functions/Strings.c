@@ -3,9 +3,118 @@
 #include <string.h>
 
 
+// prototypes:
+
+void printMenu();											//print the start menu 
+int checkString(char[]);									//input a string check if the string is insert properly and return it
+int asciiSum(char[]);										//return the sum of the ascii number of the list of words
+double asciiAvg(char[]);									//return the average of the ascii number of the list of words
+int getSize(int, int);										//return a number between the two send numbers
+void printWords(char[][20], int);							//print the words in the word list with ascii sum, ascii average and the word itself
+void insertStrings(char[][20], int);						//input numbers of strings according to the send number 
+void sortStringsLexicographic(char[][20], int);				//sort the send list by lexicographic order
+void sortStringsByLength(char[][20], int);					//sort the send list by length order
+void sortStringsByAsciiAvg(char[][20], int);				//sort the send list by ascii average order
+void sortStringsByAsciiSum(char[][20], int);				//sort the send list by ascii sum order
+void sortString(char[]);									//sort the chars of one string by lexicographic order 
+void sortEachString(char[][20], int);						//sort the chars of each string in the word list by lexicographic order 
+void sortAllAsOne(char[][20], int);							//combine all the strings in a list, sort the combined string by lexicographic order and split it like the origin list
+void stringReturn(char[], int);								//calclate the number of space needed for the ascii sum print
+
+
 int main()
 {
-	
+	int insert_flag = 0;								//flag that check if there was an input to the words
+	int errors = 0;
+	int words_number = 0;
+	char words_list[10][20] = { 0 };
+	while (1)											//loop for the main menu
+	{
+		printMenu();									//print the menu
+		int operator;
+		operator = getSize(0, 99);		
+		if (!(operator >=0 && operator<=8))				//check if the operator number is in the rigth range
+		{												//if not:
+			if (errors == 4)							//if we reach 5 errors, exit the terminal
+			{
+				printf("5 errors, bye bye.");
+				exit(0);
+			}
+			errors++;
+			printf("You made %d errors from 5, try again,\n", errors);  //print the number of errors and try again
+		}
+		else                                             //the operator is in the rigth range:
+		{
+			switch (operator)							//operate the selectef task
+			{
+			case 0:										//task 0: exit the terminal
+				printf("You chose to end the program, bye!!!");
+				exit(0);
+
+			case 1:										//task 1: input the number of the words and then input the words to the word list
+				printf("Enter new word count,\n");
+				words_number = getSize(2, 10);
+				insertStrings(words_list, words_number);
+				insert_flag = 1;						//change the flag
+				break;
+
+			case 2:										//print the insert words
+				if (insert_flag)
+				{
+					printf("The words are:\n");
+					printf("==============\n");
+					printWords(words_list, words_number);
+				}
+				else
+					printf("There are no words, cannot operate.\n");
+				break;
+
+			case 3:										//run the lexicographic sort
+				if (insert_flag)
+					sortStringsLexicographic(words_list, words_number);
+				else
+					printf("There are no words, cannot operate.\n");
+				break;
+
+			case 4:										//run the length sort
+				if (insert_flag)
+					sortStringsByLength(words_list, words_number);
+				else
+					printf("There are no words, cannot operate.\n");
+				break;
+
+			case 5:										//run the ascii sum sort
+				if (insert_flag)
+					sortStringsByAsciiSum(words_list, words_number);
+				else
+					printf("There are no words, cannot operate.\n");
+				break;
+
+			case 6:										//run the ascii average sort
+				if (insert_flag)
+					sortStringsByAsciiAvg(words_list, words_number);
+				else
+					printf("There are no words, cannot operate.\n");
+				break;
+
+			case 7:										//run the string sort
+				if (insert_flag)
+					sortEachString(words_list, words_number);
+				else
+					printf("There are no words, cannot operate.\n");
+				break;
+
+			case 8:										//run the combined string sort
+				if (insert_flag)
+					sortAllAsOne(words_list, words_number);
+				else
+					printf("There are no words, cannot operate.\n");
+				break;
+			}
+			
+		}
+
+	}
 	return 0;
 }
 
