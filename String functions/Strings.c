@@ -154,3 +154,133 @@ void insertStrings(char list_words[][20], int N)
 	}
 }
 
+void sortStringsLexicographic(char list_words[][20], int words_num)
+//sort the send list by lexicographic order
+{
+	int i, j;
+	char temp [20];
+	for (i = 0; i < words_num; i++)				//run on all the words
+	{
+		for (j = 0; j < words_num-i-1; j++)		//run without the last word
+		{
+			if (strcmp(list_words[j], list_words[j + 1]) > 0)		//compare if the j word is bigger than the j+1 word (by ascii value of each char - lexicographic)
+			{
+				strcpy(temp, list_words[j]);						//swap between the j word and the j+1 word
+				strcpy(list_words[j], list_words[j+1]);
+				strcpy(list_words[j+1], temp);
+			}
+		}
+	}
+}
+
+void sortStringsByLength(char list_words[][20], int words_num)
+//sort the send list by length order
+{
+	int i, j;
+	char temp[20];
+	for (i = 0; i < words_num; i++)				//run on all the words
+	{
+		for (j = 0; j < words_num - i - 1; j++)		//run without the last word
+		{
+			if (strlen(list_words[j])> strlen(list_words[j+1]))			//check if the j word is longer than the j+1 word
+			{
+				strcpy(temp, list_words[j]);							//swap between the j word and the j+1 word
+				strcpy(list_words[j], list_words[j + 1]);
+				strcpy(list_words[j + 1], temp);
+			}
+		}
+	}
+}
+
+void sortStringsByAsciiAvg(char list_words[][20], int words_num)
+//sort the send list by ascii average order
+{
+	int i, j;
+	char temp[20];
+	for (i = 0; i < words_num; i++)				//run on all the words	
+	{
+		for (j = 0; j < words_num - i - 1; j++)			//run without the last word
+		{
+			if (asciiAvg(list_words[j])> asciiAvg(list_words[j + 1]))			//check if the ascii average of the j word is bigger than the j+1 word
+			{
+				strcpy(temp, list_words[j]);									//swap between the j word and the j+1 word
+				strcpy(list_words[j], list_words[j + 1]);
+				strcpy(list_words[j + 1], temp);
+			}
+		}
+	}
+}
+
+void sortStringsByAsciiSum(char list_words[][20], int words_num)
+//sort the send list by ascii sum order
+{
+	int i, j;
+	char temp[20];
+	for (i = 0; i < words_num; i++)			//run on all the words
+	{
+		for (j = 0; j < words_num - i - 1; j++)			//run without the last word
+		{
+			if (asciiSum(list_words[j]) > asciiSum(list_words[j + 1]))  //check if the ascii sum of the j word is bigger than the j+1 word
+			{
+				strcpy(temp, list_words[j]);							//swap between the j word and the j+1 word
+				strcpy(list_words[j], list_words[j + 1]);
+				strcpy(list_words[j + 1], temp);
+			}
+		}
+	}
+}
+
+void sortString(char word[])
+//sort the chars of one string by lexicographic order
+{
+	int i, j;
+	char temp;
+	for (i = 0; i < strlen(word); i++)			//run on all the chars in the string
+	{
+		for (j = 0; j < strlen(word) - i - 1; j++)     //run on all the chars in the string without the last char
+		{
+			if (word[j] > word[j + 1])					//swap between the j cahr and the j+1 char
+			{
+				temp = word[j];
+				word[j] = word[j + 1];
+				word[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void sortEachString(char list_words[][20], int words_num)
+//sort the chars of each string in the word list by lexicographic order 
+{
+	int i;
+	for (i = 0; i < words_num; i++)  //run on all the words in the word list and sort each string by lexicographic order
+	{
+		sortString(list_words[i]);
+	}
+}
+
+void sortAllAsOne(char list_words[][20], int words_num)
+//combine all the strings in a list, sort the combined string by lexicographic order and split it like the origin list
+{
+	int i;
+	char temp[201] = "";
+	for (i = 0; i < words_num; i++)         //run on all the words
+	{
+		strcat(temp, list_words[i]);		//combine all the word to one string
+	}
+
+	sortString(temp);						//sort the combined string
+	char* p2 = temp;						//pointer to the compined string
+	for (i = 0; i < words_num; i++)
+	{
+		char* p1 = list_words[i];			//pointer to the original word list
+		while (*p1)
+		{
+			*p1 = *p2;						//return the values of the combined string to the original word list 
+			p1++;
+			p2++;
+		}
+
+	}
+}
+
