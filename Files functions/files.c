@@ -12,9 +12,159 @@ typedef struct serie {									//struct for every serie, contain its name, serie
 	int* watchingDetails;								//dinamic array that contain the number of views for every season of the serie
 }serie;
 
+void showMenu();										//print the start menu 
+void unifyDatabase(FILE*, FILE*);						//unify the series between two files
+serie** getUnifyDatabaseDetails(int*);						//build and save the details of the series text file to the memory
+void printSeriesList(serie**, int);						//print the datails of every serie
+void getWatchingDetails(serie** , int );				//input a new view and update the details 
+void printWatchingDetails(serie** );					//print the details of a single serie
+void printSeriesByCode(serie**, int);					//print the all the series by their code 
+void printSeriesByRank(serie**, int);					//print the all the series by their rank 
+void makeSeriesFileSortedByRank(serie**, int);			//make a new series file
+
 int main()
 {
+	serie** series_list = NULL;							//pointer of the struct array
+	int i;
+	int flag_unity = 1;									//flag after unify the database (after task 1)
+	int flag_database = 0;								//flag after update the database (after task 2)
+	int res;
+	int count_of_series = 0;							//number of series
+	FILE* first_tvs;									//pointer of the first file
+	FILE* second_tvs;									//pointer of the second file
+	char first_name[20] = { 0 };						//name of the first file
+	char second_name[20] = { 0 };						//name of the second file
 
+	while (1)											//loop for the main menu
+	{
+		showMenu();										//print the menu
+		int operator;									//save the operation of the input
+		printf("Enter Your Selection:");
+		res = scanf("%d", &operator);				
+		if (!(operator>0 && operator<9))				//check if the number input is ok
+			operator = 0;
+		switch (operator)								//operate the selected task
+		{
+		case 0:
+			printf("Wrong Option, Try Again !!!\n");
+			break;
+		case 1:											//task 1
+			if (flag_unity)								//if we didnt unify yet
+			{
+				while (1)								//run until we get a correct input
+				{
+					printf("Enter First File Name:\n");			
+					res = scanf("%s", first_name);				//input the file name
+					first_tvs = fopen(first_name, "r");			//open the file with the input name
+					if (first_tvs != 0)							//check if the file open correctly
+						break;
+					printf("error in opening file %s !!!\n", first_name);	//there was en error in the opening file
+				}
+
+				while (1)								//run until we get a correct input
+				{	
+					printf("Enter Second File Name:\n");
+					res = scanf("%s", second_name);				//input the file name
+					second_tvs = fopen(second_name, "r");		//open the file with the input name
+					if (second_tvs != 0)						//check if the file open correctly
+						break;
+					printf("error in opening file %s !!!\n", second_name);     //there was en error in the opening file
+				}
+
+				unifyDatabase(first_tvs, second_tvs);			//run the first task function
+				printf("Unify Succeeded\n");
+				fclose(first_tvs);						//close the first file
+				fclose(second_tvs);						//close the seecond file
+				flag_unity = 0;							//mark that we unify the files (we did task 1)
+			}
+			else
+				printf("Unify Database Has Been Done Already !!!\n");	//if we ran first task again 
+			break;
+
+		case 2:											//task 2:
+			if (!flag_unity)							//check if we did the first task
+			{
+				series_list = getUnifyDatabaseDetails(&count_of_series);		//run the second task and save the results in series_list
+				printf("Get Unify Database Details Succeeded\n");				
+				flag_database = 1;												//mark that we save to the database (we did task 2) 
+			}
+			else
+				printf("You must unify database before using this option!!!\n");
+			break;
+
+		case 3:											//task 3:
+			if (!flag_unity)							//check if we did the first task
+			{
+				if (flag_database)						//check if we did the second task
+					printSeriesByCode(series_list, count_of_series);        //run the third task
+				else
+					printf("You must Get Unify Database Details before using this option!!!\n");
+			}
+			else
+				printf("You must unify database before using this option!!!\n");
+			break;
+
+		case 4:											//task 4:
+			if (!flag_unity)							//check if we did the first task
+			{
+				if (flag_database)						//check if we did the second task
+					getWatchingDetails(series_list, count_of_series);		//run the fourth task
+				else
+					printf("You must Get Unify Database Details before using this option!!!\n");
+			}
+			else
+				printf("You must unify database before using this option!!!\n");
+			break;
+
+		case 5:											//task 5:
+			if (!flag_unity)							//check if we did the first task
+			{
+				if (flag_database)						//check if we did the second task
+					printWatchingDetails(series_list);			//check if we did the fifth task
+				else
+					printf("You must Get Unify Database Details before using this option!!!\n");
+			}
+			else
+				printf("You must unify database before using this option!!!\n");
+			break;
+
+		case 6:											//task 6:
+			if (!flag_unity)							//check if we did the first task
+			{
+				if (flag_database)						//check if we did the second task
+					printSeriesByRank(series_list, count_of_series);		//check if we did the sixth task
+				else
+					printf("You must Get Unify Database Details before using this option!!!\n");
+			}
+			else
+				printf("You must unify database before using this option!!!\n");
+			break;
+
+		case 7:											//task 7:
+			if (!flag_unity)							//check if we did the first task
+			{
+				if (flag_database)						//check if we did the second task
+					makeSeriesFileSortedByRank(series_list, count_of_series);		//check if we did the seventh task
+				else
+					printf("You must Get Unify Database Details before using this option!!!\n");
+			}
+			else
+				printf("You must unify database before using this option!!!\n");
+			break;
+
+		case 8:												//task 8:
+			for (i = 0; i < count_of_series; i++)			//run on all the series if we open the second task
+			{
+				free(series_list[i]->watchingDetails);		//free the watchingDetails dinamic array
+				free(series_list[i]);						//free the serie value dinamic array
+			}
+			if (flag_database)
+				free(series_list);								//free the serie pointer dinamic array if we open the second task
+			printf("End Of The Program...");
+			exit(0);										//close the program
+			break;
+		}
+	}
 	return 0;
 }
 
