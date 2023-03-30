@@ -70,3 +70,22 @@ void printWords(char list_words[][20], int words_num)
 	}
 }
 
+int asciiSum(char str1[])
+//return the sum of the ascii number of the list of words
+{
+	int i = 0;
+	int sum = 0;
+	while (*str1 != '\0')				//run until we get to the end of the string
+	{
+		sum += (int)*str1;				//add the ascii value to sum
+		str1++;							//increase the string pointer
+	}
+	return sum;							//return the ascii sum
+}
+
+double asciiAvg(char str1[])
+//return the average of the ascii number of the list of words
+{
+	double sum = asciiSum(str1);			//get the ascii sum from the last function
+	return sum / (strlen(str1));			//retun the ascii average by divide by the string length
+}
