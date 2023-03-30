@@ -270,3 +270,36 @@ void printWatchingDetails(serie** watch_series)
 	fclose(watching_print);
 }
 
+void printSeriesByCode(serie** watch_series, int len)
+//print the all the series by their code 
+{
+	int i = 0;
+	for (i = 0; i < len; i++)			//print the series from the struct by its code
+	{
+		printf("%03d-%s(%d)\n", watch_series[i]->serieCode, watch_series[i]->serieName, watch_series[i]->numSeasons);
+	}
+	printf("\n");
+}
+
+void printSeriesByRank(serie** watch_series, int len)
+//print the all the series by their rank 
+{
+	int i,j;
+	int max_rate = 0;
+	for (i = 0; i < len; i++)					//find what is the maximum rank in the struct
+	{
+		if (watch_series[i]->rank > max_rate)
+			max_rate = watch_series[i]->rank;
+	}
+
+	for (i = max_rate; i >= 0; i--)				//run on all the ranks from the max to 0
+	{
+		printf("RANK %d\n", i);
+		for (j = 0; j < len; j++)				//run on all the series in the struct
+		{
+			if (watch_series[j]->rank == i)
+				printSeriesList(watch_series, j);	//print using the print func
+		}
+	}
+}
+
