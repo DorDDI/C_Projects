@@ -284,3 +284,19 @@ void sortAllAsOne(char list_words[][20], int words_num)
 	}
 }
 
+void stringReturn(char str1[] ,int number)
+//calclate the number of space needed for the ascii sum print
+{
+	int i;
+	int counter = 0;						//number of space
+	while (number)							//while number != 0
+	{
+		counter = counter + 1;
+		number = number / 10;				//remove the rigth digit
+	}
+	for (i = 0; i < 5-counter; i++)			//add 5 - number of digit to add the number of spaces
+	{
+		str1[i] = ' ';
+	}
+	str1[i] = '\0';
+}
