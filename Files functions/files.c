@@ -303,3 +303,25 @@ void printSeriesByRank(serie** watch_series, int len)
 	}
 }
 
+void makeSeriesFileSortedByRank(serie** watch_series, int len)
+//make a new series file
+{
+	FILE* serie_rank_file;
+	serie_rank_file = fopen("seriesRank.txt", "w");
+	int i, j;
+	int max_rate = 0;
+	for (i = 0; i < len; i++)					//find what is the maximum rank in the struct
+	{
+		if (watch_series[i]->rank > max_rate)
+			max_rate = watch_series[i]->rank;
+	}
+	for (i = max_rate; i >= 0; i--)				//run on all the ranks from the max to 0
+	{
+		for (j = 0; j < len; j++)				//print using the print func
+		{
+			if (watch_series[j]->rank == i)
+				fprintf(serie_rank_file, "%03d(Rank:%d)-%s\n", watch_series[j]->serieCode, i, watch_series[j]->serieName);
+		}
+	}
+	fclose(serie_rank_file);
+}
