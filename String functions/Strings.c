@@ -89,3 +89,68 @@ double asciiAvg(char str1[])
 	double sum = asciiSum(str1);			//get the ascii sum from the last function
 	return sum / (strlen(str1));			//retun the ascii average by divide by the string length
 }
+
+int getSize(int min, int max)
+//return a number between the two send numbers
+{
+	int i;
+	int number;
+	char input[201] = { 0 };
+	do                              //do an input check 
+	{
+		number = 0;
+		int flag = 1;
+		printf("Please enter a number between %d and %d:", min, max);
+		gets(input);
+		int start_index = 0;
+		while (input[start_index] == ' ')
+		{
+			start_index++;
+		}
+
+		int end_index = (int)strlen(input)-1;
+
+		while (input[end_index] == ' ')
+		{
+			end_index--;
+		}
+
+		for (i = start_index; i <= end_index; i++)
+		{
+			if (!((input[i] >= '0' && input[i] <= '9')))				//check if the input is a number
+			{
+				number = max + 1;										//if not, number get an unproper value
+				flag = 0;
+				break;
+			}
+		}
+		if (flag)   //if the input is a number
+		{
+			for (i = start_index; i<= end_index; i++)					// converse the string to integer
+				number = number * 10 + input[i] - '0';
+		}									
+	} while (number > max || number < min);
+	return number;														//return the input number
+}
+
+void insertStrings(char list_words[][20], int N)
+//input numbers of strings according to the send number
+{
+	int i = 0;
+	int flag = 1;
+	while (i < N)			//run on all the words
+	{
+		if (flag)
+			printf("Please enter word #%d:\n", i + 1);			//print at the beginning of the input
+		else
+			printf("Wrong input, try again:\n");				// print if the input is incorrect
+		if (checkString(list_words[i]) == 1)					//check if the input is incorrect
+		{
+			i++;
+			flag = 1;
+		}
+		else
+			flag = 0;
+	}
+}
+
